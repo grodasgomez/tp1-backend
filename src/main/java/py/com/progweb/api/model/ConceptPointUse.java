@@ -19,6 +19,6 @@ public class ConceptPointUse {
     @Column(name = "description", length = 100, nullable = false)
     private String description;
 
-    @Column(name = "points", length = 100, nullable = false)
+    @Column(name = "points", nullable = false)
     private Integer points;
 }
