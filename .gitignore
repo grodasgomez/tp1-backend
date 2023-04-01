@@ -545,4 +545,7 @@ $RECYCLE.BIN/
 *.lnk
 
 target/
+.vscode/
+install.sh
+start.sh
 # End of https://www.toptal.com/developers/gitignore/api/java,windows,linux,vs,netbeans,intellij
