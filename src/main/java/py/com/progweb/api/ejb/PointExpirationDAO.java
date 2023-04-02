@@ -60,7 +60,7 @@ public class PointExpirationDAO {
             .setMaxResults(1)
             .getResultList();
         
-        return result.size() > 0 ? result.get(0) : null;
+        return !result.isEmpty() ? result.get(0) : null;
     }
 
     public List<PointExpiration> getAll() {
