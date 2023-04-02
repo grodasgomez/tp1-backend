@@ -33,7 +33,8 @@ public class PointUse {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
-    @Column(name = "concept", nullable = false)
-    private String concept;
+    @ManyToOne
+    @JoinColumn(name = "concept_point_use_id", referencedColumnName = "id", nullable = false)
+    private ConceptPointUse concept;
 
 }

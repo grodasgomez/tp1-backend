@@ -11,7 +11,7 @@ import py.com.progweb.api.ejb.PointRuleDAO;
 import py.com.progweb.api.exceptions.ApiException;
 import py.com.progweb.api.model.PointRule;
 
-@Path("point_rule")
+@Path("rules")
 @Produces("application/json")
 @Consumes("application/json")
 @RequestScoped
