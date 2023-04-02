@@ -8,6 +8,7 @@
 wildfly-18.0.1.Final/
 docker-compose.yml
 nb-configuration.xml
+src\main\resources\META-INF\persistence.xml
 
 # User-specific stuff
 .idea/**/workspace.xml
