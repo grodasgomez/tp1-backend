@@ -35,7 +35,7 @@ public class PointRuleRest {
 
     @POST
     @Path("/")
-    public Response create(PointRule pointRule) {
+    public Response create(PointRule pointRule) throws ApiException {
         pointRuleDao.create(pointRule);
         return Response.ok(pointRule).build();
     }
