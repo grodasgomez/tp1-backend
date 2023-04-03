@@ -199,7 +199,7 @@ public class PointRuleDAO {
             throw new ApiException("El limite inferior debe ser menor que el limite superior", 400);
         }
 
-        if (payload.getLowerLimit() != null) {
+        if (payload.getLowerLimit() != null && payload.getLowerLimit().compareTo(oldRule.getLowerLimit()) != 0) {
             if (payload.getLowerLimit() <= 0) {
                 throw new ApiException("El limite inferior debe ser mayor que cero", 400);
             }
@@ -223,7 +223,7 @@ public class PointRuleDAO {
                 throw new ApiException("El limite inferior no es consistente", 400);
             }
         }
-        if (payload.getUpperLimit() != null) {
+        if (payload.getUpperLimit() != null && payload.getUpperLimit().compareTo(oldRule.getUpperLimit()) != 0) {
             if (payload.getUpperLimit() <= 0) {
                 throw new ApiException("El limite superior debe ser mayor que cero", 400);
             }
