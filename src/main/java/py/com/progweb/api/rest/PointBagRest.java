@@ -10,9 +10,12 @@ import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import py.com.progweb.api.dto.CreateBag;
@@ -34,21 +37,18 @@ import py.com.progweb.api.model.PointRule;
 @Consumes("application/json")
 @RequestScoped
 public class PointBagRest {
-    
     @Inject
     PointBagDAO pointBagDao;
-    
+
     @Inject
     ClientDAO clientDao;
-    
+
     @Inject
     PointRuleDAO pointRuleDao;
-    
+
     @Inject
     PointExpirationDAO pointExpirationDao;
-    
-    
-    
+
     @POST
     @Path("/")
     public Response create(CreateBag body) throws ApiException {
@@ -58,43 +58,53 @@ public class PointBagRest {
         PointBag pointBag = new PointBag();
         pointBag.setClient(clientDao.getById(id));
         pointBag.setOperationAmount(amount);
-        
+
         PointRule pointRule = pointRuleDao.getByAmount(amount);
-        
-        if (pointRule!=null){
+
+        if (pointRule != null){
             pointBag.setPoints(amount/pointRule.getConversionRate());
-        }else{
+        } else {
             throw new ApiException ("No hay una regla para este monto",500);
         }
-        
+
         pointBag.setPointsBalance(pointBag.getPoints());
         pointBag.setUsedPoints(0);
-        
+
         Date date = new Date();
         PointExpiration pointExpiration= pointExpirationDao.getForDate(date);
-        
-        if (pointExpiration!=null){
+
+        if (pointExpiration != null){
             pointBag.setExpirationDate(this.sumDaysToDate(date, pointExpiration.getValidDaysCount()));
-        }else{
+        } else {
             pointBag.setExpirationDate(this.sumDaysToDate(date, 3));
         }
-        
-        pointBag.setAssignmentDate(date);
-        
-        
-        pointBag = pointBagDao.create(pointBag);
 
+        pointBag.setAssignmentDate(date);
+        pointBag = pointBagDao.create(pointBag);
         pointBag.getClient();
-        
         return Response.ok(pointBag).build();
     }
-    
+
     public Date sumDaysToDate(Date date, int days){
-      if (days==0) return date;
-      Calendar calendar = Calendar.getInstance();
-      calendar.setTime(date); 
-      calendar.add(Calendar.DAY_OF_YEAR, days);  
-      return calendar.getTime(); 
+        if (days == 0)
+            return date;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, days);
+        return calendar.getTime();
     }
-    
+
+    @GET
+	@Path("/client/{id}")
+	public Response getByClient(@PathParam("id") Integer id) {
+		return Response.ok(pointBagDao.getByClient(id)).build();
+	}
+
+    @GET
+    @Path("/range/")
+    public Response listByRange(@QueryParam("lower") Integer lower, @QueryParam("upper") Integer upper) throws ApiException {
+        if (lower == null || upper == null)
+            throw new ApiException("Debe especificar un rango", 400);
+        return Response.ok(pointBagDao.listByRange(lower, upper)).build();
+    }
 }
