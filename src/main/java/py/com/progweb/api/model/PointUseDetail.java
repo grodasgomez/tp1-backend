@@ -1,7 +1,5 @@
 package py.com.progweb.api.model;
 
-import java.util.Date;
-
 import javax.persistence.*;
 
 import lombok.Getter;
