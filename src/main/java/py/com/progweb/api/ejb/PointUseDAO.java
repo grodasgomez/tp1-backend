@@ -16,5 +16,10 @@ public class PointUseDAO {
 
 	public List<PointUse> getAll() {
         return this.em.createQuery("select c from PointUse c", PointUse.class).getResultList();
-    }
+        }
+        public PointUse create(PointUse pointUse) {
+            pointUse.setId(null);
+            this.em.persist(pointUse);
+            return pointUse;
+        }
 }
