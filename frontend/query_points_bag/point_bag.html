@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Crud Reglas</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="point_use.js"></script>
+    <link rel="stylesheet" href="../style.css">
+
+    </head>
+    <body class="">
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Consultas Bolsa <b>Puntos</b></h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="#rangeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons"></i> <span>Por Rango</span></a>
+                            <a href="#clientModal" class="btn btn-success" data-toggle="modal"><i class="material-icons"></i> <span>Por Cliente</span></a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente ID</th>
+                            <th>Fecha asignación</th>
+                            <th>Fecha expiración</th>
+                            <th>Puntos</th>
+                            <th>Puntos usados</th>
+                            <th>Balance</th>
+                            <th>Monto operacion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Date Modal HTML -->
+    <div id="rangeModal" class="modal fade" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="date-form">
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Por fecha</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Entre</label>
+                            <input name="clientId" id="date" type="text" maxlength="100" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Y</label>
+                            <input name="clientId" id="date" type="date" maxlength="100" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                        <input type="submit" class="btn btn-success" value="Consultar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Client Modal HTML -->
+    <div id="clientModal" class="modal fade" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="client-form">
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Por cliente</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Cliente ID</label>
+                            <input name="clientId" id="client" type="number" maxlength="100" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                        <input type="submit" class="btn btn-success" value="Consultar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Concept Modal HTML -->
+    <div id="conceptModal" class="modal fade" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="concept-form">
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Por concepto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Concepto ID</label>
+                            <input name="clientId" id="concept" type="number" maxlength="100" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                        <input type="submit" class="btn btn-success" value="Consultar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    </body></html>
