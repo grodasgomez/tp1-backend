@@ -27,10 +27,10 @@ public class PointRuleDAO {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public PointRule create(PointRule pointRule) throws ApiException {
         if (pointRule.getLowerLimit() > pointRule.getUpperLimit()) {
-            throw new ApiException("El limite inferior debe ser menor que el limite superior", 404);
+            throw new ApiException("El limite inferior debe ser menor que el limite superior", 400);
         }
         if (pointRule.getLowerLimit() <= 0 || pointRule.getUpperLimit() <= 0 || pointRule.getConversionRate() <= 0) {
-            throw new ApiException("El limite inferior, superior y el valor de conversion deben ser mayores que cero respectivamente", 404);
+            throw new ApiException("El limite inferior, superior y el valor de conversion deben ser mayores que cero respectivamente", 400);
         }
 
         List<PointRule> pointRuleList = this.em.createQuery("select c from PointRule c order by lowerLimit", PointRule.class).getResultList();
@@ -58,10 +58,10 @@ public class PointRuleDAO {
                     this.em.persist(pointRule);
                     return pointRule;
                 } else {
-                    throw new ApiException("Valor de conversion es mayor que rango anterior", 404);
+                    throw new ApiException("Valor de conversion es mayor que rango anterior", 400);
                 }
             } else {
-                throw new ApiException("Debe haber por lo menos un valor entre rangos", 404);
+                throw new ApiException("Debe haber por lo menos un valor entre rangos", 400);
             }
         }
 
@@ -73,10 +73,10 @@ public class PointRuleDAO {
                     this.em.persist(pointRule);
                     return pointRule;
                 } else {
-                    throw new ApiException("Valor de conversion es menor que rango siguiente", 404);
+                    throw new ApiException("Valor de conversion es menor que rango siguiente", 400);
                 }
             } else {
-                throw new ApiException("Rango insertado crea un hueco", 404);
+                throw new ApiException("Rango insertado crea un hueco", 400);
             }
         }
 
@@ -92,7 +92,7 @@ public class PointRuleDAO {
                     this.em.persist(pointRule);
                     return pointRule;
                 } else {
-                    throw new ApiException("Conflicto con valor de conversion", 404);
+                    throw new ApiException("Conflicto con valor de conversion", 400);
                 }
             }
 
@@ -105,14 +105,14 @@ public class PointRuleDAO {
                     this.em.persist(pointRule);
                     return pointRule;
                 } else {
-                    throw new ApiException("Conflicto con valor de conversion", 404);
+                    throw new ApiException("Conflicto con valor de conversion", 400);
                 }
             }
 
             index++;
         }
 
-        throw new ApiException("No se definieron correctamente los rangos", 404);
+        throw new ApiException("No se definieron correctamente los rangos", 400);
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -181,12 +181,12 @@ public class PointRuleDAO {
         }
 
         if (payload.getLowerLimit() > payload.getUpperLimit()) {
-            throw new ApiException("El limite inferior debe ser menor que el limite superior", 404);
+            throw new ApiException("El limite inferior debe ser menor que el limite superior", 400);
         }
 
         if (payload.getLowerLimit() != null) {
             if (payload.getLowerLimit() <= 0) {
-                throw new ApiException("El limite inferior debe ser mayor que cero", 404);
+                throw new ApiException("El limite inferior debe ser mayor que cero", 400);
             }
 
             /* Crece hacia adentro */
@@ -205,12 +205,12 @@ public class PointRuleDAO {
                 oldRule.setLowerLimit(payload.getLowerLimit());
             }
             else {
-                throw new ApiException("El limite inferior no es consistente", 404);
+                throw new ApiException("El limite inferior no es consistente", 400);
             }
         }
         if (payload.getUpperLimit() != null) {
             if (payload.getUpperLimit() <= 0) {
-                throw new ApiException("El limite superior debe ser mayor que cero", 404);
+                throw new ApiException("El limite superior debe ser mayor que cero", 400);
             }
 
             /* Crece hacia adentro */
@@ -220,7 +220,7 @@ public class PointRuleDAO {
                     oldRule.setUpperLimit(payload.getUpperLimit());
                 }
                 else {
-                    throw new ApiException("El limite superior maximo es el maximo decimal, no se puede cambiar", 404);
+                    throw new ApiException("El limite superior maximo es el maximo decimal, no se puede cambiar", 400);
                 }
             }
             /* Crece hacia afuera */
@@ -229,13 +229,13 @@ public class PointRuleDAO {
                 oldRule.setUpperLimit(payload.getUpperLimit());
             }
             else {
-                throw new ApiException("El limite superior no es consistente", 404);
+                throw new ApiException("El limite superior no es consistente", 400);
             }
         }
 
         if (payload.getConversionRate() != null) {
             if (payload.getConversionRate() <= 0) {
-                throw new ApiException("El valor de conversion debe ser mayor que cero", 404);
+                throw new ApiException("El valor de conversion debe ser mayor que cero", 400);
             }
 
             if (next != null) {
@@ -243,7 +243,7 @@ public class PointRuleDAO {
                     oldRule.setConversionRate(payload.getConversionRate());
                 }
                 else {
-                    throw new ApiException("El cambio debe ser mayor que el del siguiente rango", 404);
+                    throw new ApiException("El cambio debe ser mayor que el del siguiente rango", 400);
                 }
             }
             if (prev != null) {
@@ -251,7 +251,7 @@ public class PointRuleDAO {
                     oldRule.setConversionRate(payload.getConversionRate());
                 }
                 else {
-                    throw new ApiException("El cambio debe ser menor que el del rango anterior", 404);
+                    throw new ApiException("El cambio debe ser menor que el del rango anterior", 400);
                 }
             }
         }
