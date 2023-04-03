@@ -45,8 +45,8 @@ $(document).ready(function () {
         <td>${data.id}</td>
         <td>${data.client.name} ${data.client.lastName}</td>
         <td>${data.used_points}</td>
-        <td>${data.concept.description}</td>
         <td>${data.date}</td>
+        <td>${data.concept.description}</td>
         <td>${details}</td>
     </tr>`);
                 $("#addModal").modal("hide");
