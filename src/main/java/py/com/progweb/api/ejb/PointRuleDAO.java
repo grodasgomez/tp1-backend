@@ -19,10 +19,9 @@ public class PointRuleDAO {
     public List<PointRule> getAll() {
         return this.em.createQuery("select c from PointRule c order by lowerLimit", PointRule.class).getResultList();
     }
-    
+
     public PointRule getByAmount(Integer amount) {
         List<PointRule> result= this.em.createQuery("select c from PointRule c where c.lowerLimit<= :custMount and c.upperLimit>= :custMount", PointRule.class).setParameter("custMount", amount).setMaxResults(1).getResultList();
-        System.out.println("resul "+result);
         return !result.isEmpty() ? result.get(0) : null;
     }
 

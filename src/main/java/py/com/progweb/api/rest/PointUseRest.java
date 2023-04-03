@@ -74,7 +74,6 @@ public class PointUseRest {
         Collections.sort(listPointBag, new expirationDateComparator());
         int totalPoints=this.totalPoints(pointBags);
         ConceptPointUse concept = conceptDao.getById(conceptPointUseId);
-        int remainsPoints = totalPoints - concept.getPoints();
         if (concept == null){
             throw new ApiException ("No existe el concepto",422);
         }
@@ -125,6 +124,7 @@ public class PointUseRest {
             }
         }
         pointUse.setDetails(details);
+        int remainsPoints = totalPoints - concept.getPoints();
         PointUseRest.sendEmail(client,pointUse,remainsPoints);
         return Response.ok(pointUse).build();
     }

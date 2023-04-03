@@ -24,8 +24,4 @@ public class PointRule {
 
     @Column(name = "conversion_rate", nullable = false)
     private Integer conversionRate;
-
-    public PointRule() {
-
-    }
 }

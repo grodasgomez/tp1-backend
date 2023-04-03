@@ -15,7 +15,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PointUse {
-
     @Id
     @Basic(optional = false)
     @Column(name = "id")
