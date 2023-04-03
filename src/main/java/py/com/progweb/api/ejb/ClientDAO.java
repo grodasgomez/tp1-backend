@@ -74,11 +74,11 @@ public class ClientDAO {
     }
 
     public List<Client> getByNameLike(String name){
-        return this.em.createQuery("select c from Client c where name like :name", Client.class).setParameter("name", "%" + name + "%").getResultList();
+        return this.em.createQuery("select c from Client c where lower(name) like lower(:name)", Client.class).setParameter("name", "%" + name + "%").getResultList();
     }
 
     public List<Client> getByLastNameLike(String lastName){
-        return this.em.createQuery("select c from Client c where last_name like :lastName", Client.class).setParameter("lastName", "%" + lastName + "%").getResultList();
+        return this.em.createQuery("select c from Client c where lower(last_name) like lower(:lastName)", Client.class).setParameter("lastName", "%" + lastName + "%").getResultList();
     }
 
     public List<Client> getByBirthDate(Date birthDate){
