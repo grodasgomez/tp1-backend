@@ -3,6 +3,7 @@ package py.com.progweb.api.rest;
 import java.util.Set;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -80,17 +81,17 @@ public class PointUseRest {
         pointUse.setUsed_points(concept.getPoints());
 
         int totalPointsConcept=concept.getPoints();
-
-        pointUse.setDate(new Date());
+        
+        pointUse.setDate(PointUseRest.getDateWithoutTimeUsingCalendar());
 
         pointUse = pointUseDao.create(pointUse);
 
-        Set<PointUseDetail> details = new HashSet<PointUseDetail>();
+        Set<PointUseDetail> details = new HashSet<>();
 
         for (PointBag pointBag : listPointBag) {
             int pointsBag = pointBag.getPointsBalance();
             PointBag pointBagNew = pointBag;
-            int usedPointsBag=0;
+            int usedPointsBag;
             if ( pointsBag>totalPointsConcept ){
                 pointsBag = pointsBag - totalPointsConcept;
                 usedPointsBag=totalPointsConcept;
@@ -129,6 +130,14 @@ public class PointUseRest {
         public int compare(PointBag a, PointBag b) {
             return a.getExpirationDate().compareTo(b.getExpirationDate()) ;
         }
+    }
+    public static Date getDateWithoutTimeUsingCalendar() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 
     public Integer totalPoints (Set<PointBag> listPointBag){
