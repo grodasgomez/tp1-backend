@@ -7,7 +7,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import py.com.progweb.api.exceptions.ApiException;
 import py.com.progweb.api.model.PointUse;
 
 @Stateless
