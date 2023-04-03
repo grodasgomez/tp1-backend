@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -64,7 +66,7 @@ public class PointUseRest {
 
     @POST
     @Path("/")
-    public Response create(CreateUsedPoints body) throws ApiException, MessagingException {
+    public Response create(CreateUsedPoints body) throws ApiException {
         Integer clientId = body.getClientId();
         Integer conceptPointUseId = body.getConceptPointUseId();
         PointUse pointUse = new PointUse();
@@ -136,35 +138,43 @@ public class PointUseRest {
         }
     }
 
-    public static int sendEmail(Client client, PointUse pointUse, int remains) throws AddressException, MessagingException {
-        Properties props = new Properties();
-        props.setProperty("mail.smtp.host", "smtp.office365.com");
-        props.setProperty("mail.smtp.starttls.enable", "true");
-        props.setProperty("mail.smtp.port", "587");
-        props.setProperty("mail.smtp.auth", "true");
-
-        Session session=Session.getDefaultInstance(props);
-
-        String mailSender = "backendsiuu@outlook.com";
-        String passwordSender = "olimpiatupapa_39";
-        String mailReceiver = client.getEmail();
-        String subject = "Comprobante";
-        String messageContent = "Backend\n"
-                +"Puntos Usados: "+pointUse.getUsed_points()+"\n"
-                +"Concepto: "+pointUse.getConcept().getDescription()+"\n"
-                +"Puntos restantes: "+remains;
-
-        MimeMessage message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(mailSender));
-        message.addRecipient(Message.RecipientType.TO,new InternetAddress(mailReceiver));
-        message.setSubject(subject);
-        message.setText(messageContent);
-
-        try (Transport t = session.getTransport("smtp")) {
-            t.connect(mailSender,passwordSender);
-            t.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-        }
-        return 0;
+    public static int sendEmail(Client client, PointUse pointUse, int remains){
+        
+        
+            
+            try {
+                Properties props = new Properties();
+                props.setProperty("mail.smtp.host", "smtp.office365.com");
+                props.setProperty("mail.smtp.starttls.enable", "true");
+                props.setProperty("mail.smtp.port", "587");
+                props.setProperty("mail.smtp.auth", "true");
+                
+                Session session=Session.getDefaultInstance(props);
+                
+                String mailSender = "backendsiuu@outlook.com";
+                String passwordSender = "olimpiatupapa_3";
+                String mailReceiver = client.getEmail();
+                String subject = "Comprobante";
+                String messageContent = "Backend\n"
+                        +"Puntos Usados: "+pointUse.getUsed_points()+"\n"
+                        +"Concepto: "+pointUse.getConcept().getDescription()+"\n"
+                        +"Puntos restantes: "+remains;
+                
+                MimeMessage message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(mailSender));
+                message.addRecipient(Message.RecipientType.TO,new InternetAddress(mailReceiver));
+                message.setSubject(subject);
+                message.setText(messageContent);
+                
+                Transport t = session.getTransport("smtp");
+                t.connect(mailSender,passwordSender);
+                t.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+                
+                
+            } catch (MessagingException ex) {
+                Logger.getLogger(PointUseRest.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return 0;
     }
 
     public Integer totalPoints (Set<PointBag> listPointBag){
