@@ -23,6 +23,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import py.com.progweb.api.dto.CreateUsedPoints;
+import py.com.progweb.api.dto.CustomDateUtils;
 import py.com.progweb.api.ejb.ClientDAO;
 import py.com.progweb.api.ejb.ConceptDAO;
 import py.com.progweb.api.ejb.PointBagDAO;
@@ -88,7 +89,7 @@ public class PointUseRest {
 
         int totalPointsConcept=concept.getPoints();
 
-        pointUse.setDate(PointUseRest.getDateWithoutTimeUsingCalendar());
+        pointUse.setDate(CustomDateUtils.sumDaysToDate(0));
 
         pointUse = pointUseDao.create(pointUse);
 
@@ -136,16 +137,6 @@ public class PointUseRest {
         }
     }
 
-    //TODO: repeated code
-    public static Date getDateWithoutTimeUsingCalendar() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
-
     public static int sendEmail(Client client, PointUse pointUse, int remains) throws AddressException, MessagingException {
         Properties props = new Properties();
         props.setProperty("mail.smtp.host", "smtp.office365.com");
@@ -156,7 +147,7 @@ public class PointUseRest {
         Session session=Session.getDefaultInstance(props);
 
         String mailSender = "backendsiuu@outlook.com";
-        String passwordSender = "olimpiatupapa3";
+        String passwordSender = "olimpiatupapa_39";
         String mailReceiver = client.getEmail();
         String subject = "Comprobante";
         String messageContent = "Backend\n"
