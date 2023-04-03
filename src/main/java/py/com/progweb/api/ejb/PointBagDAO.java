@@ -72,4 +72,12 @@ public class PointBagDAO {
 
         }
     }
+
+	public List<PointBag> getByClient(Integer id) {
+		return this.em.createQuery("select c from PointBag c where c.client.id = :client_id", PointBag.class).setParameter("client_id", id).getResultList();
+	}
+
+	public List<PointBag> listByRange(Integer lower, Integer upper) {
+        return this.em.createQuery("select c from PointBag c where c.pointsBalance between :lower and :upper", PointBag.class).setParameter("lower", lower).setParameter("upper", upper).getResultList();
+	}
 }
