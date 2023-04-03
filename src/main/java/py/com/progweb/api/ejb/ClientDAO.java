@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import py.com.progweb.api.exceptions.ApiException;
 import py.com.progweb.api.model.Client;
 
+import java.util.Date;
 import java.util.List;
 
 @Stateless
@@ -70,6 +71,17 @@ public class ClientDAO {
         }
         this.em.remove(client);
         return client;
+    }
 
+    public List<Client> getByNameLike(String name){
+        return this.em.createQuery("select c from Client c where name like :name", Client.class).setParameter("name", "%" + name + "%").getResultList();
+    }
+
+    public List<Client> getByLastNameLike(String lastName){
+        return this.em.createQuery("select c from Client c where last_name like :lastName", Client.class).setParameter("lastName", "%" + lastName + "%").getResultList();
+    }
+
+    public List<Client> getByBirthDate(Date birthDate){
+        return this.em.createQuery("select c from Client c where birth_date = :birthDate", Client.class).setParameter("birthDate", birthDate).getResultList();
     }
 }
