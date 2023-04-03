@@ -113,4 +113,5 @@
             </plugins>
         </pluginManagement>
     </build>
+    <name>tp1Backend</name>
 </project>

@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -45,5 +46,8 @@ public class Client {
     @Column(name = "birth_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
+    
+    @OneToMany (mappedBy="client")
+    private List<PointBag> listPointBag;
 
 }

@@ -19,6 +19,11 @@ public class PointRuleDAO {
     public List<PointRule> getAll() {
         return this.em.createQuery("select c from PointRule c", PointRule.class).getResultList();
     }
+    
+    public PointRule getByMount(Integer mount) {
+        List<PointRule> result= this.em.createQuery("select c from PointRule c where c.lowerlimit<= :custMount and c.upperLimit>= :custMount", PointRule.class).setParameter("custMount", mount).setMaxResults(1).getResultList();
+        return !result.isEmpty() ? result.get(0) : null;
+    }
 
     public PointRule getById(Integer id) {
         return this.em.find(PointRule.class, id);

@@ -32,6 +32,19 @@ public class PointRuleRest {
         PointRule pointRule = pointRuleDao.getById(id);
         return Response.ok(pointRule).build();
     }
+    
+    @GET
+    @Path("/amount/{amount}")
+    public Response pointsByMount(@PathParam("amount") Integer amount) throws ApiException {
+        PointRule pointRule = pointRuleDao.getByMount(amount);
+        Integer points=0;
+        if (pointRule!=null){
+            points= amount/pointRule.getConversionRate();
+        }else{
+            throw new ApiException ("No hay una regla para este monto",500);
+        }
+        return Response.ok(points).build();
+    }
 
     @POST
     @Path("/")
