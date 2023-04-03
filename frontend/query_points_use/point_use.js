@@ -44,12 +44,15 @@ function loadTable(url) {
 <td>${x.pointBag.id}</td>
 <td>${x.pointBag.usedPoints}</td></tr>`});
                     details += "</table>";
+                    console.log(data);
                     $("#table").append(`
 <tr>
     <td>${data.id}</td>
+    <td>${data.client.id}</td>
     <td>${data.client.name} ${data.client.lastName}</td>
     <td>${data.used_points}</td>
-    <td>${data.concept.descripcion}</td>
+    <td>${data.date}</td>
+    <td>${data.concept.description}</td>
     <td>${details}</td>
 </tr>`);
                 });
