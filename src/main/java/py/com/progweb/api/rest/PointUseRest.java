@@ -88,7 +88,7 @@ public class PointUseRest {
         pointUse.setUsed_points(concept.getPoints());
 
         int totalPointsConcept=concept.getPoints();
-        
+
         pointUse.setDate(PointUseRest.getDateWithoutTimeUsingCalendar());
 
         pointUse = pointUseDao.create(pointUse);
@@ -99,19 +99,17 @@ public class PointUseRest {
             int pointsBag = pointBag.getPointsBalance();
             PointBag pointBagNew = pointBag;
             int usedPointsBag;
-            if ( pointsBag>totalPointsConcept ){
+            if (pointsBag>totalPointsConcept){
                 pointsBag = pointsBag - totalPointsConcept;
                 usedPointsBag=totalPointsConcept;
                 totalPointsConcept=0;
-
-            } else  {
+            } else {
                 totalPointsConcept = totalPointsConcept - pointsBag;
                 usedPointsBag=pointsBag;
                 pointsBag=0;
             }
-            
-            if (usedPointsBag>0){
-                
+
+            if (usedPointsBag>0) {
                 pointBagNew.setPointsBalance(pointsBag);
                 pointBagNew.setUsedPoints(pointBagNew.getPoints()-pointsBag);
 
@@ -124,21 +122,21 @@ public class PointUseRest {
 
                 pointUseDetail = pointUseDetailDao.create(pointUseDetail);
                 details.add(pointUseDetail);
-                
             }
-            
         }
         pointUse.setDetails(details);
         PointUseRest.sendEmail(client,pointUse,remainsPoints);
         return Response.ok(pointUse).build();
     }
-    
+
     class expirationDateComparator implements java.util.Comparator<PointBag> {
         @Override
         public int compare(PointBag a, PointBag b) {
             return a.getExpirationDate().compareTo(b.getExpirationDate()) ;
         }
     }
+
+    //TODO: repeated code
     public static Date getDateWithoutTimeUsingCalendar() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -147,16 +145,16 @@ public class PointUseRest {
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
-    
+
     public static int sendEmail(Client client, PointUse pointUse, int remains) throws AddressException, MessagingException {
         Properties props = new Properties();
         props.setProperty("mail.smtp.host", "smtp.office365.com");
         props.setProperty("mail.smtp.starttls.enable", "true");
         props.setProperty("mail.smtp.port", "587");
         props.setProperty("mail.smtp.auth", "true");
-        
+
         Session session=Session.getDefaultInstance(props);
-        
+
         String mailSender = "backendsiuu@outlook.com";
         String passwordSender = "olimpiatupapa3";
         String mailReceiver = client.getEmail();
@@ -164,20 +162,18 @@ public class PointUseRest {
         String messageContent = "Backend\n"
                 +"Puntos Usados: "+pointUse.getUsed_points()+"\n"
                 +"Concepto: "+pointUse.getConcept().getDescription()+"\n"
-                +"Puntos restantes: "+remains ;
-        
+                +"Puntos restantes: "+remains;
+
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(mailSender));
         message.addRecipient(Message.RecipientType.TO,new InternetAddress(mailReceiver));
         message.setSubject(subject);
         message.setText(messageContent);
-        
-            try (Transport t = session.getTransport("smtp")) {
-                t.connect(mailSender,passwordSender);
-                t.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-            }
-      
-        
+
+        try (Transport t = session.getTransport("smtp")) {
+            t.connect(mailSender,passwordSender);
+            t.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+        }
         return 0;
     }
 
@@ -195,6 +191,7 @@ public class PointUseRest {
 	public Response getByConcept(@PathParam("id") Integer id) {
 		return Response.ok(pointUseDao.getByConcept(id)).build();
 	}
+
 	@GET
 	@Path("/client/{id}")
 	public Response getByClient(@PathParam("id") Integer id) {

@@ -12,18 +12,18 @@ import py.com.progweb.api.model.PointUse;
 @Stateless
 public class PointUseDAO {
 	@PersistenceContext(unitName = "pruebaPU")
-        private EntityManager em;
+    private EntityManager em;
 
 	public List<PointUse> getAll() {
         return this.em.createQuery("select c from PointUse c", PointUse.class).getResultList();
+	}
 
-        }
-        public PointUse create(PointUse pointUse) {
-            pointUse.setId(null);
-            this.em.persist(pointUse);
-            return pointUse;
-        }
-        
+	public PointUse create(PointUse pointUse) {
+		pointUse.setId(null);
+		this.em.persist(pointUse);
+		return pointUse;
+	}
+
 	public List<PointUse> getByConcept(Integer id) {
 		return this.em.createQuery("select c from PointUse c where c.concept.id = :concept_id", PointUse.class).setParameter("concept_id", id).getResultList();
 	}
