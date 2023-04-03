@@ -36,7 +36,7 @@ public class PointRuleRest {
     @GET
     @Path("/amount/{amount}")
     public Response pointsByMount(@PathParam("amount") Integer amount) throws ApiException {
-        PointRule pointRule = pointRuleDao.getByMount(amount);
+        PointRule pointRule = pointRuleDao.getByAmount(amount);
         Integer points=0;
         if (pointRule!=null){
             points= amount/pointRule.getConversionRate();

@@ -53,7 +53,7 @@ public class PointBagRest {
         pointBag.setClient(clientDao.getById(id));
         pointBag.setOperationAmount(amount);
         
-        PointRule pointRule = pointRuleDao.getByMount(amount);
+        PointRule pointRule = pointRuleDao.getByAmount(amount);
         
         if (pointRule!=null){
             pointBag.setPoints(amount/pointRule.getConversionRate());
