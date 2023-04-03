@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Crud Reglas</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="point_rule.js"></script>
+    <link rel="stylesheet" href="../style.css">
+
+    </head>
+    <body class="">
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Manejar <b>rangos de puntos</b></h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="#addModal" class="btn btn-success" data-toggle="modal"><i class="material-icons"></i> <span>Agregar Cliente</span></a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Limite Inferior</th>
+                            <th>Limite superior</th>
+                            <th>Equivalencia</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table">
+                        <tr>
+                            <td>0</td>
+                            <td>Limite Inferior</td>
+                            <td>Limite superior</td>
+                            <td>Equivalencia</td>
+                            <td>
+                                <a href="#editModal" class="edit open-editModal" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="" data-original-title="Editar"></i></a>
+                                <a href="#deleteModal" class="delete open-deleteModal" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="" data-original-title="Borrar"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Add Modal HTML -->
+    <div id="addModal" class="modal fade" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="add-form">
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Agregar Cliente</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Limite Inferior</label>
+                            <input name="lowerLimit" type="text" maxlength="100" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Limite superior</label>
+                            <input name="upperLimit" type="text" maxlength="100" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Equivalencia</label>
+                            <input name="conversionRate" type="text" maxlength="100" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                        <input type="submit" class="btn btn-success" value="Agregar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Modal HTML -->
+    <div id="editModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="edit-form">
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Editar Cliente con ID: <span id="edit-id"></span></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Limite Inferior</label>
+                            <input id="edit-lowerLimit" name="lowerLimit" type="text" maxlength="100" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Limite superior</label>
+                            <input id="edit-upperLimit" name="upperLimit" type="text" maxlength="100" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Equivalencia</label>
+                            <input id="edit-conversionRate" name="conversionRate" type="text" maxlength="100" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                        <input type="submit" class="btn btn-info" value="Guardar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Delete Modal HTML -->
+    <div id="deleteModal" class="modal fade" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="delete-form">
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Borrar Regla con ID: <span id="delete-id"></span></h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">					
+                        <p>Estas seguro que quiere borrar?</p>
+                        <p class="text-warning"><small>Esta acción no es reversible.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                        <input type="submit" class="btn btn-danger" value="Borrar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    </body></html>
