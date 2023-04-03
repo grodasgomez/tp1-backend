@@ -4,9 +4,15 @@
  */
 package py.com.progweb.api.ejb;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import py.com.progweb.api.exceptions.ApiException;
 import py.com.progweb.api.model.PointBag;
 
@@ -18,13 +24,15 @@ import py.com.progweb.api.model.PointBag;
 public class PointBagDAO {
     @PersistenceContext(unitName = "pruebaPU")
     private EntityManager em;
-    
+
+    private Logger logger = LoggerFactory.getLogger(PointBagDAO.class);
+
     public PointBag create(PointBag pointBag) {
         pointBag.setId(null);
         this.em.persist(pointBag);
         return pointBag;
     }
-    
+
     public PointBag update(Integer id, PointBag payload) throws ApiException {
         PointBag pointBag = this.getById(id);
         if (pointBag == null) {
@@ -41,9 +49,27 @@ public class PointBagDAO {
 
         return pointBag;
     }
-    
+
     public PointBag getById(Integer id) {
         return this.em.find(PointBag.class, id);
     }
-    
+
+    public void updateExpiredPoints() {
+        List<PointBag> points = this.em
+                .createQuery("SELECT p FROM PointBag p WHERE p.expirationDate < CURRENT_DATE and p.pointsBalance != 0",
+                        PointBag.class)
+                .getResultList();
+
+        if (points.isEmpty()) {
+            this.logger.info("No points to update");
+            return;
+        }
+
+        for (PointBag pointBag : points) {
+            pointBag.setPointsBalance(0);
+            this.em.merge(pointBag);
+            this.logger.info("Updated pointBag with id: {}", pointBag.getId());
+
+        }
+    }
 }
