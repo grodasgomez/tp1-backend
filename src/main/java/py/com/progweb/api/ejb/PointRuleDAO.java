@@ -32,8 +32,15 @@ public class PointRuleDAO {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public PointRule create(PointRule pointRule) throws ApiException {
 
-        if (pointRule.getLowerLimit() == null || pointRule.getUpperLimit() == null || pointRule.getConversionRate() == null) {
-            throw new ApiException("Se deben llenar todos los valores", 400);
+        if(pointRule.getLowerLimit() == null){
+            pointRule.setLowerLimit(1);
+        }
+        if(pointRule.getUpperLimit() == null){
+            pointRule.setUpperLimit(Integer.MAX_VALUE);
+        }
+
+        if (pointRule.getConversionRate() == null) {
+            throw new ApiException("El valor de conversion es requerido", 400);
         }
 
         if (pointRule.getLowerLimit() > pointRule.getUpperLimit()) {
