@@ -5,8 +5,7 @@ import java.util.Date;
 
 public class CustomDateUtils {
     public static Date add4Hours(Date date) {
-        new Date(date.getTime() + (1000 * 60 * 60 * 12));
-        return date;
+        return new Date(date.getTime() + (1000 * 60 * 60 * 4));
     }
 
 	public static Date sumDaysToDate(int days) {

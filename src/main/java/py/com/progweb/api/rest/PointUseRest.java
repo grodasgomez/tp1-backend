@@ -3,7 +3,6 @@ package py.com.progweb.api.rest;
 import java.util.Set;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -90,7 +89,7 @@ public class PointUseRest {
         int totalPointsConcept=concept.getPoints();
 
         pointUse.setDate(CustomDateUtils.sumDaysToDate(0));
-
+        //TODO: aca ya guarda
         pointUse = pointUseDao.create(pointUse);
 
         Set<PointUseDetail> details = new HashSet<>();
@@ -119,14 +118,14 @@ public class PointUseRest {
                 pointUseDetail.setPointBag(pointBagNew);
                 pointUseDetail.setPointUse(pointUse);
                 pointUseDetail.setUsedPoints(usedPointsBag);
-
+                //TODO: aca ya guarda
                 pointUseDetail = pointUseDetailDao.create(pointUseDetail);
                 details.add(pointUseDetail);
             }
         }
         pointUse.setDetails(details);
         int remainsPoints = totalPoints - concept.getPoints();
-        PointUseRest.sendEmail(client,pointUse,remainsPoints);
+        PointUseRest.sendEmail(client, pointUse, remainsPoints);
         return Response.ok(pointUse).build();
     }
 

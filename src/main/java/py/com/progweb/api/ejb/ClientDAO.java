@@ -4,6 +4,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import py.com.progweb.api.dto.CustomDateUtils;
 import py.com.progweb.api.exceptions.ApiException;
 import py.com.progweb.api.model.Client;
 
@@ -17,6 +18,7 @@ public class ClientDAO {
 
     public Client create(Client client) {
         client.setId(null);
+        client.setBirthDate(CustomDateUtils.add4Hours(client.getBirthDate()));
         this.em.persist(client);
         return client;
     }
@@ -33,7 +35,7 @@ public class ClientDAO {
             client.setLastName(payload.getLastName());
         }
         if (payload.getBirthDate() != null) {
-            client.setBirthDate(payload.getBirthDate());
+            client.setBirthDate(CustomDateUtils.add4Hours(payload.getBirthDate()));
         }
         if (payload.getPhone() != null) {
             client.setPhone(payload.getPhone());

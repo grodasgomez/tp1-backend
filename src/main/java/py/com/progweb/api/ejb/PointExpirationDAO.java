@@ -24,8 +24,6 @@ public class PointExpirationDAO {
         }
         pointExpiration.setValidStartDate(CustomDateUtils.add4Hours(pointExpiration.getValidStartDate()));
         pointExpiration.setValidEndDate(CustomDateUtils.add4Hours(pointExpiration.getValidEndDate()));
-        System.out.println(pointExpiration.getValidStartDate());
-        System.out.println(pointExpiration.getValidEndDate());
         this.em.persist(pointExpiration);
         return pointExpiration;
     }
@@ -48,8 +46,6 @@ public class PointExpirationDAO {
         if (pointExp.getValidStartDate().compareTo(pointExp.getValidEndDate()) > 0) {
             throw new ApiException("Start date after end date", 422);
         }
-        System.out.println(pointExp.getValidStartDate());
-        System.out.println(pointExp.getValidEndDate());
 
         this.em.merge(pointExp);
 
