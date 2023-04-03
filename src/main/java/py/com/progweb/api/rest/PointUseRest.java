@@ -10,13 +10,16 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import py.com.progweb.api.ejb.ClientDAO;
 import py.com.progweb.api.ejb.ConceptDAO;
+import py.com.progweb.api.ejb.PointBagDAO;
 
 import py.com.progweb.api.ejb.PointUseDAO;
+import py.com.progweb.api.ejb.PointUseDetailDAO;
 import py.com.progweb.api.exceptions.ApiException;
 import py.com.progweb.api.model.Client;
 import py.com.progweb.api.model.ConceptPointUse;
 import py.com.progweb.api.model.PointBag;
 import py.com.progweb.api.model.PointUse;
+import py.com.progweb.api.model.PointUseDetail;
 
 @Path("points_used")
 @Produces("application/json")
@@ -31,6 +34,12 @@ public class PointUseRest {
         
         @Inject
         ConceptDAO conceptDao;
+        
+        @Inject
+        PointBagDAO pointBagDao;
+        
+        @Inject
+        PointUseDetailDAO pointUseDetailDao;
 
 	@GET
 	@Path("/")
@@ -69,15 +78,31 @@ public class PointUseRest {
             
             for (int i=0;i<listPointBag.size() && totalPointsConcept>0;i++){
                 int pointsBag=listPointBag.get(i).getPointsBalance();
-                
+                PointBag pointBagNew = listPointBag.get(i);
+                int usedPointsBag=0;
                 if ( pointsBag>totalPointsConcept ){
                     pointsBag = pointsBag - totalPointsConcept;
+                    usedPointsBag=totalPointsConcept;
                     totalPointsConcept=0;
+                    
                 }else{
                     totalPointsConcept = totalPointsConcept - pointsBag;
+                    usedPointsBag=pointsBag;
                     pointsBag=0;
                 }
                 
+                pointBagNew.setPointsBalance(pointsBag);
+                pointBagNew.setUsedPoints(pointBagNew.getPoints()-pointsBag);
+                
+                pointBagNew = pointBagDao.update(pointBagNew.getId(), pointBagNew);
+                
+                //createUseDetail
+                PointUseDetail pointUseDetail = new PointUseDetail();
+                pointUseDetail.setPointBag(pointBagNew);
+                pointUseDetail.setPointUse(pointUse);
+                pointUseDetail.setUsedPoints(usedPointsBag);
+                
+                pointUseDetail = pointUseDetailDao.create(pointUseDetail);
                 
                 
             }
