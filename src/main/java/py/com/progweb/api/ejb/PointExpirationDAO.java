@@ -55,8 +55,8 @@ public class PointExpirationDAO {
     }
 
     public PointExpiration getForDate(Date date) {
-        List<PointExpiration> result = this.em.createQuery("select c from PointExpiration c where c.valid_start_date <= :date and c.valid_stop_date >= :date",PointExpiration.class)
-            .setParameter(":date", date)
+        List<PointExpiration> result = this.em.createQuery("select c from PointExpiration c where c.validStartDate <= :date and c.validEndDate >= :date",PointExpiration.class)
+            .setParameter("date", date)
             .setMaxResults(1)
             .getResultList();
         

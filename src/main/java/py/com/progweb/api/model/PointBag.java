@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,10 +28,12 @@ public class PointBag {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "assignment_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date assignmentDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "expiration_date", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date expirationDate;
 
     @Column(name = "points", nullable = false)

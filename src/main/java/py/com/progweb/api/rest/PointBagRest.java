@@ -6,6 +6,9 @@ package py.com.progweb.api.rest;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -13,6 +16,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+
+import py.com.progweb.api.dto.CreateBag;
 import py.com.progweb.api.ejb.ClientDAO;
 import py.com.progweb.api.ejb.PointBagDAO;
 import py.com.progweb.api.ejb.PointExpirationDAO;
@@ -48,7 +53,11 @@ public class PointBagRest {
     
     @POST
     @Path("/")
-    public Response create(Integer id, Integer amount) throws ApiException {
+    // @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Response create(CreateBag body) throws ApiException {
+        Integer id = body.getId();
+        Integer amount = body.getAmount();
+
         PointBag pointBag = new PointBag();
         pointBag.setClient(clientDao.getById(id));
         pointBag.setOperationAmount(amount);
@@ -77,6 +86,8 @@ public class PointBagRest {
         
         
         pointBag = pointBagDao.create(pointBag);
+
+        pointBag.getClient();
         
         return Response.ok(pointBag).build();
     }
