@@ -59,7 +59,7 @@ public class PointExpirationDAO {
             .setParameter("date", date)
             .setMaxResults(1)
             .getResultList();
-        
+
         return !result.isEmpty() ? result.get(0) : null;
     }
 
@@ -74,6 +74,5 @@ public class PointExpirationDAO {
         }
         this.em.remove(pointExp);
         return pointExp;
-
     }
 }

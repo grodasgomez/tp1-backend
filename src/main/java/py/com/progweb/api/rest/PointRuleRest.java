@@ -32,7 +32,7 @@ public class PointRuleRest {
         PointRule pointRule = pointRuleDao.getById(id);
         return Response.ok(pointRule).build();
     }
-    
+
     @GET
     @Path("/amount/{amount}")
     public Response pointsByMount(@PathParam("amount") Integer amount) throws ApiException {

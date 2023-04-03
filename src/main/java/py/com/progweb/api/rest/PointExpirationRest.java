@@ -17,7 +17,6 @@ import py.com.progweb.api.model.PointExpiration;
 @Consumes("application/json")
 @RequestScoped
 public class PointExpirationRest {
-
     @Inject
     PointExpirationDAO pointExpDao;
 

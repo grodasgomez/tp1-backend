@@ -14,7 +14,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PointBag {
-
     @Id
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
@@ -47,5 +46,4 @@ public class PointBag {
 
     @Column(name = "operation_amount", nullable = false)
     private Integer operationAmount;
-
 }

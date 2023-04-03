@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PointUseDetail {
-
     @Id
     @Basic(optional = false)
     @Column(name = "id")
@@ -31,5 +30,4 @@ public class PointUseDetail {
 
     @Column(name = "used_points", nullable = false)
     private Integer usedPoints;
-
 }

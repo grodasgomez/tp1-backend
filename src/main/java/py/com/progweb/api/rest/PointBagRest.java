@@ -4,6 +4,8 @@
  */
 package py.com.progweb.api.rest;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -70,13 +72,13 @@ public class PointBagRest {
         pointBag.setPointsBalance(pointBag.getPoints());
         pointBag.setUsedPoints(0);
 
-        Date date = new Date();
+        Date date = this.sumDaysToDate(0);
         PointExpiration pointExpiration= pointExpirationDao.getForDate(date);
 
         if (pointExpiration != null){
-            pointBag.setExpirationDate(this.sumDaysToDate(date, pointExpiration.getValidDaysCount()));
+            pointBag.setExpirationDate(this.sumDaysToDate(pointExpiration.getValidDaysCount()));
         } else {
-            pointBag.setExpirationDate(this.sumDaysToDate(date, 3));
+            pointBag.setExpirationDate(this.sumDaysToDate(3));
         }
 
         pointBag.setAssignmentDate(date);
@@ -85,12 +87,14 @@ public class PointBagRest {
         return Response.ok(pointBag).build();
     }
 
-    public Date sumDaysToDate(Date date, int days){
-        if (days == 0)
-            return date;
+    //TODO: repeated code
+    public Date sumDaysToDate(int days) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_YEAR, days);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
 
@@ -107,4 +111,12 @@ public class PointBagRest {
             throw new ApiException("Debe especificar un rango", 400);
         return Response.ok(pointBagDao.listByRange(lower, upper)).build();
     }
+
+    @GET
+	@Path("/expires/{days}")
+	public Response getClientsByExpiration(@PathParam("days") Integer days) {
+        Date expiration = this.sumDaysToDate(days);
+        LocalDate dateFormatted = expiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		return Response.ok(pointBagDao.getClientsByExpiration(dateFormatted)).build();
+	}
 }

@@ -7,7 +7,5 @@ import lombok.Setter;
 @Setter
 public class CreateBag {
     private Integer id;
-
     private Integer amount;
-
 }

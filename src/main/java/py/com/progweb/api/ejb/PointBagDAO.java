@@ -4,7 +4,11 @@
  */
 package py.com.progweb.api.ejb;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import py.com.progweb.api.exceptions.ApiException;
+import py.com.progweb.api.model.Client;
 import py.com.progweb.api.model.PointBag;
 
 /**
@@ -69,7 +74,6 @@ public class PointBagDAO {
             pointBag.setPointsBalance(0);
             this.em.merge(pointBag);
             this.logger.info("Updated pointBag with id: {}", pointBag.getId());
-
         }
     }
 
@@ -79,5 +83,14 @@ public class PointBagDAO {
 
 	public List<PointBag> listByRange(Integer lower, Integer upper) {
         return this.em.createQuery("select c from PointBag c where c.pointsBalance between :lower and :upper", PointBag.class).setParameter("lower", lower).setParameter("upper", upper).getResultList();
+	}
+
+	public List<Client> getClientsByExpiration(LocalDate expirationDate) {
+		List<PointBag> bags = this.em.createQuery("select c from PointBag c where expiration_date = :expirationDay", PointBag.class).setParameter("expirationDay", expirationDate).getResultList();
+        Set<Client> clients = new HashSet<>();
+        for (PointBag bag : bags) {
+            clients.add(bag.getClient());
+        }
+        return new ArrayList<>(clients);
 	}
 }

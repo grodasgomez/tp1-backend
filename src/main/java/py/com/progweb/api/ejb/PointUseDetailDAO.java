@@ -16,17 +16,16 @@ import py.com.progweb.api.model.PointUseDetail;
  */
 @Stateless
 public class PointUseDetailDAO {
-        @PersistenceContext(unitName = "pruebaPU")
-        private EntityManager em;
-        
-        public List<PointUseDetail> getAll() {
-            return this.em.createQuery("select c from PointUseDetail c", PointUseDetail.class).getResultList();
-        }
-        
-        public PointUseDetail create(PointUseDetail pointUseDetail) {
-            pointUseDetail.setId(null);
-            this.em.persist(pointUseDetail);
-            return pointUseDetail;
-        }
-    
+    @PersistenceContext(unitName = "pruebaPU")
+    private EntityManager em;
+
+    public List<PointUseDetail> getAll() {
+        return this.em.createQuery("select c from PointUseDetail c", PointUseDetail.class).getResultList();
+    }
+
+    public PointUseDetail create(PointUseDetail pointUseDetail) {
+        pointUseDetail.setId(null);
+        this.em.persist(pointUseDetail);
+        return pointUseDetail;
+    }
 }

@@ -18,7 +18,6 @@ import py.com.progweb.api.model.Client;
 @Consumes("application/json")
 @RequestScoped
 public class ClientRest {
-
     @Inject
     ClientDAO clientDao;
 
