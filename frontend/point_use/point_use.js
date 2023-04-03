@@ -50,6 +50,18 @@ $(document).ready(function () {
     </tr>`);
                 $("#addModal").modal("hide");
             },
+            beforeSend: function() {
+                // Show the span inside the button
+                $('#addPointUse').children()[0].style.display = 'inline-block';
+                $('#addPointUse').children()[1].style.display = 'none';
+                $('#addPointUse').prop('disabled', true);
+            },
+            complete: function() {
+                // Hide the span inside the button
+                $('#addPointUse').children()[0].style.display = 'none';
+                $('#addPointUse').children()[1].style.display = 'inline-block';
+                $('#addPointUse').prop('disabled', false);
+            },
             error: function (data) {
                 window.alert(data.responseJSON.message);
             }

@@ -21,15 +21,15 @@ function loadTable(url) {
             data.forEach(data => {
                     $("#table").append(`
 <tr>
-<td>${x.id}</td>
-<td>${x.name}</td>
-<td>${x.lastName}</td>
-<td>${x.documentNumber}</td>
-<td>${x.documentType}</td>
-<td>${x.nationality}</td>
-<td>${x.email}</td>
-<td>${x.phone}</td>
-<td>${x.birthDate}</td>
+<td>${data.id}</td>
+<td>${data.name}</td>
+<td>${data.lastName}</td>
+<td>${data.documentNumber}</td>
+<td>${data.documentType}</td>
+<td>${data.nationality}</td>
+<td>${data.email}</td>
+<td>${data.phone}</td>
+<td>${data.birthDate}</td>
 </tr>`);
                 });
         },
