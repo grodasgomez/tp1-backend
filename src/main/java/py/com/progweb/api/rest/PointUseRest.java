@@ -1,7 +1,9 @@
 package py.com.progweb.api.rest;
 
-import java.util.Date;
 import java.util.List;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -90,4 +92,26 @@ public class PointUseRest {
             }
             return total; 
         }
+
+	@GET
+	@Path("/concept/{id}")
+	public Response getByConcept(@PathParam("id") Integer id) {
+		return Response.ok(pointUseDao.getByConcept(id)).build();
+	}
+	@GET
+	@Path("/client/{id}")
+	public Response getByClient(@PathParam("id") Integer id) {
+		return Response.ok(pointUseDao.getByClient(id)).build();
+	}
+
+	@GET
+	@Path("/used_date/{date}")
+	public Response getByUsedDate(@PathParam("date") String date) throws ApiException {
+		try {
+			Date dateFormatted= new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			return Response.ok(pointUseDao.getByUsedDate(dateFormatted)).build();
+		} catch (Exception e) {
+			throw new ApiException("Incorrect Date", 500);
+		}
+	}
 }
