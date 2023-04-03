@@ -7,7 +7,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -51,5 +51,5 @@ public class Client {
 
     @OneToMany (mappedBy="client", fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<PointBag> listPointBag;
+    private Set<PointBag> listPointBag;
 }

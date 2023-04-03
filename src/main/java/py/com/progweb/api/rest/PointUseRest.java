@@ -1,10 +1,10 @@
 package py.com.progweb.api.rest;
 
-import java.util.List;
-
+import java.util.Set;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -57,7 +57,7 @@ public class PointUseRest {
         Integer conceptPointUseId = body.getConceptPointUseId();
         PointUse pointUse = new PointUse();
         Client client = clientDao.getById(clientId);
-        List<PointBag> listPointBag = client.getListPointBag();
+        Set<PointBag> listPointBag = client.getListPointBag();
         int totalPoints=this.totalPoints(listPointBag);
 
         ConceptPointUse concept = conceptDao.getById(conceptPointUseId);
@@ -80,10 +80,11 @@ public class PointUseRest {
 
         pointUse = pointUseDao.create(pointUse);
 
-        List<PointUseDetail> details = new ArrayList<>();
-        for (int i=0;i<listPointBag.size() && totalPointsConcept>0;i++){
-            int pointsBag=listPointBag.get(i).getPointsBalance();
-            PointBag pointBagNew = listPointBag.get(i);
+        Set<PointUseDetail> details = new HashSet<PointUseDetail>();
+
+        for (PointBag pointBag : listPointBag) {
+            int pointsBag = pointBag.getPointsBalance();
+            PointBag pointBagNew = pointBag;
             int usedPointsBag=0;
             if ( pointsBag>totalPointsConcept ){
                 pointsBag = pointsBag - totalPointsConcept;
@@ -113,10 +114,11 @@ public class PointUseRest {
         return Response.ok(pointUse).build();
     }
 
-    public Integer totalPoints (List<PointBag> listPointBag){
+    public Integer totalPoints (Set<PointBag> listPointBag){
         int total=0;
-        for (int i=0;i<listPointBag.size();i++){
-            total=total + listPointBag.get(i).getPointsBalance();
+
+        for(PointBag pointBag : listPointBag){
+            total=total + pointBag.getPointsBalance();
         }
         return total;
     }
