@@ -38,14 +38,15 @@ $(document).ready(function () {
                 data.details.forEach(x => {
                     details += `</tr><tr>
     <td>${x.pointBag.id}</td>
-    <td>${x.pointBag.usedPoints}</td></tr>`});
+    <td>${x.usedPoints}</td></tr>`});
                 details += "</table>";
                 $("#table").append(`
     <tr>
         <td>${data.id}</td>
         <td>${data.client.name} ${data.client.lastName}</td>
         <td>${data.used_points}</td>
-        <td>${data.concept.descripcion}</td>
+        <td>${data.concept.description}</td>
+        <td>${data.date}</td>
         <td>${details}</td>
     </tr>`);
                 $("#addModal").modal("hide");
