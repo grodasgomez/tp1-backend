@@ -3,12 +3,10 @@ $(document).on("click", ".open-editModal", function () {
     $("#edit-id").text(id);
 
     // Copy values from table to form
-    var lowerLimit = $(this).parent().siblings().eq(1).text();
-    $("#edit-lowerLimit").val(lowerLimit);
-    var upperLimit = $(this).parent().siblings().eq(2).text();
-    $("#edit-upperLimit").val(upperLimit);
-    var conversionRate = $(this).parent().siblings().eq(3).text();
-    $("#edit-conversionRate").val(conversionRate);
+    var description = $(this).parent().siblings().eq(1).text();
+    $("#edit-description").val(description);
+    var points = $(this).parent().siblings().eq(2).text();
+    $("#edit-points").val(points);
 });
 $(document).on("click", ".open-deleteModal", function () {
     var id = $(this).parent().siblings().first().text();
@@ -101,9 +99,8 @@ function loadTable() {
                 $("#table").append(`
 <tr>
     <td>${x.id}</td>
-    <td>${x.lowerLimit}</td>
-    <td>${x.upperLimit}</td>
-    <td>${x.conversionRate}</td>
+    <td>${x.description}</td>
+    <td>${x.points}</td>
     <td>
         <a href="#editModal" class="edit open-editModal" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="" data-original-title="Editar"></i></a>
         <a href="#deleteModal" class="delete open-deleteModal" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="" data-original-title="Borrar"></i></a>
