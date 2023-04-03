@@ -39,7 +39,7 @@ $(document).ready(function () {
                 $("#addModal").modal("hide");
             },
             error: function (data) {
-                window.alert("Error al agregar");
+                window.alert(data.message);
             }
         });
     });

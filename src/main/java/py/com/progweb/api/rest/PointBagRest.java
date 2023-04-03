@@ -7,8 +7,6 @@ package py.com.progweb.api.rest;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -53,7 +51,6 @@ public class PointBagRest {
     
     @POST
     @Path("/")
-    // @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Response create(CreateBag body) throws ApiException {
         Integer id = body.getId();
         Integer amount = body.getAmount();
