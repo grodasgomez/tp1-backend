@@ -26,6 +26,11 @@ public class PointRuleDAO {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public PointRule create(PointRule pointRule) throws ApiException {
+
+        if (pointRule.getLowerLimit() == null || pointRule.getUpperLimit() == null || pointRule.getConversionRate() == null) {
+            throw new ApiException("Se deben llenar todos los valores", 400);
+        }
+
         if (pointRule.getLowerLimit() > pointRule.getUpperLimit()) {
             throw new ApiException("El limite inferior debe ser menor que el limite superior", 400);
         }
@@ -180,7 +185,11 @@ public class PointRuleDAO {
             }
         }
 
-        if (payload.getLowerLimit() > payload.getUpperLimit()) {
+        if (payload.getLowerLimit() == null && payload.getUpperLimit() == null && payload.getConversionRate() == null) {
+            throw new ApiException("Debe definir algun valor de cambio", 400);
+        }
+
+        if (payload.getLowerLimit() != null && payload.getUpperLimit() != null && payload.getLowerLimit() > payload.getUpperLimit()) {
             throw new ApiException("El limite inferior debe ser menor que el limite superior", 400);
         }
 
