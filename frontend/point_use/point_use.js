@@ -52,7 +52,7 @@ $(document).ready(function () {
                 $("#addModal").modal("hide");
             },
             error: function (data) {
-                window.alert(data.message);
+                window.alert(data.responseJSON.message);
             }
         });
     });
