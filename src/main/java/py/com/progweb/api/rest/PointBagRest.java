@@ -53,7 +53,6 @@ public class PointBagRest {
     
     @POST
     @Path("/")
-    // @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Response create(CreateBag body) throws ApiException {
         Integer id = body.getId();
         Integer amount = body.getAmount();
