@@ -2,6 +2,8 @@ package py.com.progweb.api.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +22,7 @@ public class PointUseDetail {
 
     @ManyToOne
     @JoinColumn(name = "point_use_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private PointUse pointUse;
 
     @ManyToOne
