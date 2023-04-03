@@ -29,17 +29,17 @@ public class PointUseRest {
 	@Inject
 	PointUseDAO pointUseDao;
         
-        @Inject
-        ClientDAO clientDao;
-        
-        @Inject
-        ConceptDAO conceptDao;
-        
-        @Inject
-        PointBagDAO pointBagDao;
-        
-        @Inject
-        PointUseDetailDAO pointUseDetailDao;
+    @Inject
+    ClientDAO clientDao;
+    
+    @Inject
+    ConceptDAO conceptDao;
+    
+    @Inject
+    PointBagDAO pointBagDao;
+    
+    @Inject
+    PointUseDetailDAO pointUseDetailDao;
 
 	@GET
 	@Path("/")
@@ -47,76 +47,71 @@ public class PointUseRest {
 		return Response.ok(pointUseDao.getAll()).build();
 	}
         
-        @POST
-        @Path("/")
-        public Response create(Integer clientId, Integer conceptPointUseId) throws ApiException {
-            PointUse pointUse = new PointUse();
-            Client client = clientDao.getById(clientId);
-            List<PointBag> listPointBag = client.getListPointBag();
-            int totalPoints=this.totalPoints(listPointBag);
-            
-            
-            ConceptPointUse concept = conceptDao.getById(conceptPointUseId);
-            
-            if (totalPoints>concept.getPoints()){
-                throw new ApiException ("No existen puntos suficientes",500);
-            }
-            
-            pointUse.setClient(client);
-            if (concept==null){
-                throw new ApiException ("No existe el concepto elegido",500);
-            }else{
-                pointUse.setConcept(concept);
-                pointUse.setUsed_points(concept.getPoints());
-            }
-            
-            int totalPointsConcept=concept.getPoints();
-            
-            pointUse.setDate(new Date());
-
-            pointUse = pointUseDao.create(pointUse);
-            
-            for (int i=0;i<listPointBag.size() && totalPointsConcept>0;i++){
-                int pointsBag=listPointBag.get(i).getPointsBalance();
-                PointBag pointBagNew = listPointBag.get(i);
-                int usedPointsBag=0;
-                if ( pointsBag>totalPointsConcept ){
-                    pointsBag = pointsBag - totalPointsConcept;
-                    usedPointsBag=totalPointsConcept;
-                    totalPointsConcept=0;
-                    
-                }else{
-                    totalPointsConcept = totalPointsConcept - pointsBag;
-                    usedPointsBag=pointsBag;
-                    pointsBag=0;
-                }
-                
-                pointBagNew.setPointsBalance(pointsBag);
-                pointBagNew.setUsedPoints(pointBagNew.getPoints()-pointsBag);
-                
-                pointBagNew = pointBagDao.update(pointBagNew.getId(), pointBagNew);
-                
-                //createUseDetail
-                PointUseDetail pointUseDetail = new PointUseDetail();
-                pointUseDetail.setPointBag(pointBagNew);
-                pointUseDetail.setPointUse(pointUse);
-                pointUseDetail.setUsedPoints(usedPointsBag);
-                
-                pointUseDetail = pointUseDetailDao.create(pointUseDetail);
-                
-                
-            }
-            
-            return Response.ok(pointUse).build();
+    @POST
+    @Path("/")
+    public Response create(Integer clientId, Integer conceptPointUseId) throws ApiException {
+        PointUse pointUse = new PointUse();
+        Client client = clientDao.getById(clientId);
+        List<PointBag> listPointBag = client.getListPointBag();
+        int totalPoints=this.totalPoints(listPointBag);
+        
+        
+        ConceptPointUse concept = conceptDao.getById(conceptPointUseId);
+        
+        if (totalPoints>concept.getPoints()){
+            throw new ApiException ("No existen puntos suficientes",500);
         }
         
-        public Integer totalPoints (List<PointBag> listPointBag){
-            int total=0;
-            for (int i=0;i<listPointBag.size();i++){
-                total=total + listPointBag.get(i).getPointsBalance();
+        pointUse.setClient(client);
+        pointUse.setConcept(concept);
+        pointUse.setUsed_points(concept.getPoints());
+        
+        int totalPointsConcept=concept.getPoints();
+        
+        pointUse.setDate(new Date());
+
+        pointUse = pointUseDao.create(pointUse);
+        
+        for (int i=0;i<listPointBag.size() && totalPointsConcept>0;i++){
+            int pointsBag=listPointBag.get(i).getPointsBalance();
+            PointBag pointBagNew = listPointBag.get(i);
+            int usedPointsBag=0;
+            if ( pointsBag>totalPointsConcept ){
+                pointsBag = pointsBag - totalPointsConcept;
+                usedPointsBag=totalPointsConcept;
+                totalPointsConcept=0;
+                
+            } else  {
+                totalPointsConcept = totalPointsConcept - pointsBag;
+                usedPointsBag=pointsBag;
+                pointsBag=0;
             }
-            return total; 
+            
+            pointBagNew.setPointsBalance(pointsBag);
+            pointBagNew.setUsedPoints(pointBagNew.getPoints()-pointsBag);
+            
+            pointBagNew = pointBagDao.update(pointBagNew.getId(), pointBagNew);
+            
+            PointUseDetail pointUseDetail = new PointUseDetail();
+            pointUseDetail.setPointBag(pointBagNew);
+            pointUseDetail.setPointUse(pointUse);
+            pointUseDetail.setUsedPoints(usedPointsBag);
+            
+            pointUseDetail = pointUseDetailDao.create(pointUseDetail);
+            
+            
         }
+        
+        return Response.ok(pointUse).build();
+    }
+    
+    public Integer totalPoints (List<PointBag> listPointBag){
+        int total=0;
+        for (int i=0;i<listPointBag.size();i++){
+            total=total + listPointBag.get(i).getPointsBalance();
+        }
+        return total; 
+    }
 
 	@GET
 	@Path("/concept/{id}")
