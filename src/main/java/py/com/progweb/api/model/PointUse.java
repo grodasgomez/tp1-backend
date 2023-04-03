@@ -1,6 +1,7 @@
 package py.com.progweb.api.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -37,4 +38,6 @@ public class PointUse {
     @JoinColumn(name = "concept_point_use_id", referencedColumnName = "id", nullable = false)
     private ConceptPointUse concept;
 
+    @OneToMany (mappedBy="pointBag", fetch = FetchType.LAZY)
+    private List<PointUseDetail> details;
 }

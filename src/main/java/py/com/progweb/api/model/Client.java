@@ -48,9 +48,8 @@ public class Client {
     @Column(name = "birth_date")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthDate;
-    
-    @OneToMany (mappedBy="client")
+
+    @OneToMany (mappedBy="client", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<PointBag> listPointBag;
-
 }
