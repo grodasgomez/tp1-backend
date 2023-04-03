@@ -17,7 +17,6 @@ $(document).on("click", ".open-deleteModal", function () {
 
 $(document).ready(function () {
     console.log("ready");
-    loadTable();
     $("#add-form").submit(function (e) {
         console.log("submit");
         e.preventDefault();
@@ -27,7 +26,7 @@ $(document).ready(function () {
             data[x.name] = x.value;
         });
         $.ajax({
-            url: "http://localhost:8080/prueba/rules/",
+            url: "http://localhost:8080/prueba/points_used/",
             type: "POST",
             data: JSON.stringify(data),
             headers: {
@@ -35,7 +34,20 @@ $(document).ready(function () {
               },
             datatype: "json",
             success: function (data) {
-                loadTable();
+                var details = "<table><tr><th>Bolsa ID</th><th>Usado</th>";
+                data.details.forEach(x => {
+                    details += `</tr><tr>
+    <td>${x.pointBag.id}</td>
+    <td>${x.pointBag.usedPoints}</td></tr>`});
+                details += "</table>";
+                $("#table").append(`
+    <tr>
+        <td>${data.id}</td>
+        <td>${data.client.name} ${data.client.lastName}</td>
+        <td>${data.used_points}</td>
+        <td>${data.concept.descripcion}</td>
+        <td>${details}</td>
+    </tr>`);
                 $("#addModal").modal("hide");
             },
             error: function (data) {
@@ -44,32 +56,3 @@ $(document).ready(function () {
         });
     });
 });
-
-function loadTable() {
-    console.log("loadTable");
-
-    // Clear table
-    $("#table").empty();
-    $.ajax({
-        url: "http://localhost:8080/prueba/points_used/",
-        type: "GET",
-        success: function (data) {
-            data.forEach(x => {
-                $("#table").append(`
-<tr>
-    <td>${x.id}</td>
-    <td>${x.client.name} ${x.client.lastName}</td>
-    <td>${x.used_points}</td>
-    <td>${x.concept.descripcion}</td>
-    <td>
-        <a href="#editModal" class="edit open-editModal" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="" data-original-title="Editar"></i></a>
-        <a href="#deleteModal" class="delete open-deleteModal" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="" data-original-title="Borrar"></i></a>
-    </td>
-</tr>`)
-            });
-        },
-        error: function (data) {
-            window.alert("Error al cargar la tabla");
-        }
-    });
-}
