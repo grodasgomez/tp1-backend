@@ -4,6 +4,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import py.com.progweb.api.dto.CustomDateUtils;
 import py.com.progweb.api.exceptions.ApiException;
 import py.com.progweb.api.model.PointExpiration;
 
@@ -21,7 +22,8 @@ public class PointExpirationDAO {
         if (pointExpiration.getValidStartDate().compareTo(pointExpiration.getValidEndDate()) > 0) {
             throw new ApiException("Start date after end date", 422);
         }
-
+        pointExpiration.setValidStartDate(CustomDateUtils.add4Hours(pointExpiration.getValidStartDate()));
+        pointExpiration.setValidEndDate(CustomDateUtils.add4Hours(pointExpiration.getValidEndDate()));
         this.em.persist(pointExpiration);
         return pointExpiration;
     }
@@ -32,10 +34,10 @@ public class PointExpirationDAO {
             throw new ApiException("PointExpiration not found", 404);
         }
         if (payload.getValidStartDate() != null) {
-            pointExp.setValidStartDate(payload.getValidStartDate());
+            pointExp.setValidStartDate(CustomDateUtils.add4Hours(payload.getValidStartDate()));
         }
         if (payload.getValidEndDate() != null) {
-            pointExp.setValidEndDate(payload.getValidEndDate());
+            pointExp.setValidEndDate(CustomDateUtils.add4Hours(payload.getValidEndDate()));
         }
         if (payload.getValidDaysCount() != null) {
             pointExp.setValidDaysCount(payload.getValidDaysCount());

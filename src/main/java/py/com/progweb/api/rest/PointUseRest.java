@@ -3,7 +3,6 @@ package py.com.progweb.api.rest;
 import java.util.Set;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,6 +22,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import py.com.progweb.api.dto.CreateUsedPoints;
+import py.com.progweb.api.dto.CustomDateUtils;
 import py.com.progweb.api.ejb.ClientDAO;
 import py.com.progweb.api.ejb.ConceptDAO;
 import py.com.progweb.api.ejb.PointBagDAO;
@@ -88,8 +88,8 @@ public class PointUseRest {
 
         int totalPointsConcept=concept.getPoints();
 
-        pointUse.setDate(PointUseRest.getDateWithoutTimeUsingCalendar());
-
+        pointUse.setDate(CustomDateUtils.sumDaysToDate(0));
+        //TODO: aca ya guarda
         pointUse = pointUseDao.create(pointUse);
 
         Set<PointUseDetail> details = new HashSet<>();
@@ -118,14 +118,14 @@ public class PointUseRest {
                 pointUseDetail.setPointBag(pointBagNew);
                 pointUseDetail.setPointUse(pointUse);
                 pointUseDetail.setUsedPoints(usedPointsBag);
-
+                //TODO: aca ya guarda
                 pointUseDetail = pointUseDetailDao.create(pointUseDetail);
                 details.add(pointUseDetail);
             }
         }
         pointUse.setDetails(details);
         int remainsPoints = totalPoints - concept.getPoints();
-        PointUseRest.sendEmail(client,pointUse,remainsPoints);
+        PointUseRest.sendEmail(client, pointUse, remainsPoints);
         return Response.ok(pointUse).build();
     }
 
@@ -134,16 +134,6 @@ public class PointUseRest {
         public int compare(PointBag a, PointBag b) {
             return a.getExpirationDate().compareTo(b.getExpirationDate()) ;
         }
-    }
-
-    //TODO: repeated code
-    public static Date getDateWithoutTimeUsingCalendar() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
     }
 
     public static int sendEmail(Client client, PointUse pointUse, int remains) throws AddressException, MessagingException {
@@ -156,7 +146,7 @@ public class PointUseRest {
         Session session=Session.getDefaultInstance(props);
 
         String mailSender = "backendsiuu@outlook.com";
-        String passwordSender = "olimpiatupapa3";
+        String passwordSender = "olimpiatupapa_39";
         String mailReceiver = client.getEmail();
         String subject = "Comprobante";
         String messageContent = "Backend\n"

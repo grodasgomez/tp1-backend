@@ -6,7 +6,6 @@ package py.com.progweb.api.rest;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.enterprise.context.RequestScoped;
@@ -21,6 +20,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
 import py.com.progweb.api.dto.CreateBag;
+import py.com.progweb.api.dto.CustomDateUtils;
 import py.com.progweb.api.ejb.ClientDAO;
 import py.com.progweb.api.ejb.PointBagDAO;
 import py.com.progweb.api.ejb.PointExpirationDAO;
@@ -72,30 +72,19 @@ public class PointBagRest {
         pointBag.setPointsBalance(pointBag.getPoints());
         pointBag.setUsedPoints(0);
 
-        Date date = this.sumDaysToDate(0);
+        Date date = CustomDateUtils.sumDaysToDate(0);
         PointExpiration pointExpiration= pointExpirationDao.getForDate(date);
 
         if (pointExpiration != null){
-            pointBag.setExpirationDate(this.sumDaysToDate(pointExpiration.getValidDaysCount()));
+            pointBag.setExpirationDate(CustomDateUtils.sumDaysToDate(pointExpiration.getValidDaysCount()));
         } else {
-            pointBag.setExpirationDate(this.sumDaysToDate(3));
+            pointBag.setExpirationDate(CustomDateUtils.sumDaysToDate(3));
         }
 
         pointBag.setAssignmentDate(date);
         pointBag = pointBagDao.create(pointBag);
         pointBag.getClient();
         return Response.ok(pointBag).build();
-    }
-
-    //TODO: repeated code
-    public Date sumDaysToDate(int days) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, days);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
     }
 
     @GET
@@ -115,7 +104,7 @@ public class PointBagRest {
     @GET
 	@Path("/expires/{days}")
 	public Response getClientsByExpiration(@PathParam("days") Integer days) {
-        Date expiration = this.sumDaysToDate(days);
+        Date expiration = CustomDateUtils.sumDaysToDate(days);
         LocalDate dateFormatted = expiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		return Response.ok(pointBagDao.getClientsByExpiration(dateFormatted)).build();
 	}

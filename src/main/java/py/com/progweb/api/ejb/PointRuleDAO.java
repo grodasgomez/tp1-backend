@@ -100,7 +100,7 @@ public class PointRuleDAO {
         int index = 0;
         /* Para valores que son insertados entre un rango, no puede estar entre dos rangos */
         for (PointRule currRule : pointRuleList) {
-            if (pointRule.getLowerLimit() > currRule.getLowerLimit() && pointRule.getUpperLimit() == currRule.getUpperLimit()) {
+            if (pointRule.getLowerLimit() > currRule.getLowerLimit() && pointRule.getUpperLimit().intValue() == currRule.getUpperLimit().intValue()) {
                 if (pointRule.getConversionRate() < currRule.getConversionRate() && pointRule.getConversionRate() > pointRuleList.get(index + 1).getConversionRate()) {
                     currRule.setUpperLimit(pointRule.getLowerLimit() - 1);
                     this.em.merge(currRule);
@@ -113,7 +113,7 @@ public class PointRuleDAO {
                 }
             }
 
-            if (pointRule.getLowerLimit() == currRule.getLowerLimit() && pointRule.getUpperLimit() < currRule.getUpperLimit()) {
+            if (pointRule.getLowerLimit().intValue() == currRule.getLowerLimit().intValue() && pointRule.getUpperLimit() < currRule.getUpperLimit()) {
                 if (pointRule.getConversionRate() > currRule.getConversionRate() && (index == 0 || pointRule.getConversionRate() < pointRuleList.get(index - 1).getConversionRate())) {
                     currRule.setLowerLimit(pointRule.getUpperLimit() + 1);
                     this.em.merge(currRule);
