@@ -2,8 +2,11 @@ package py.com.progweb.api.rest;
 
 import java.util.Set;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -57,8 +60,10 @@ public class PointUseRest {
         Integer conceptPointUseId = body.getConceptPointUseId();
         PointUse pointUse = new PointUse();
         Client client = clientDao.getById(clientId);
-        Set<PointBag> listPointBag = client.getListPointBag();
-        int totalPoints=this.totalPoints(listPointBag);
+        Set<PointBag> pointBags = client.getListPointBag();
+        List<PointBag> listPointBag = new ArrayList<PointBag>(client.getListPointBag());
+        Collections.sort(listPointBag, new expirationDateComparator());
+        int totalPoints=this.totalPoints(pointBags);
 
         ConceptPointUse concept = conceptDao.getById(conceptPointUseId);
 
@@ -96,22 +101,34 @@ public class PointUseRest {
                 usedPointsBag=pointsBag;
                 pointsBag=0;
             }
+            
+            if (usedPointsBag>0){
+                
+                pointBagNew.setPointsBalance(pointsBag);
+                pointBagNew.setUsedPoints(pointBagNew.getPoints()-pointsBag);
 
-            pointBagNew.setPointsBalance(pointsBag);
-            pointBagNew.setUsedPoints(pointBagNew.getPoints()-pointsBag);
+                pointBagNew = pointBagDao.update(pointBagNew.getId(), pointBagNew);
 
-            pointBagNew = pointBagDao.update(pointBagNew.getId(), pointBagNew);
+                PointUseDetail pointUseDetail = new PointUseDetail();
+                pointUseDetail.setPointBag(pointBagNew);
+                pointUseDetail.setPointUse(pointUse);
+                pointUseDetail.setUsedPoints(usedPointsBag);
 
-            PointUseDetail pointUseDetail = new PointUseDetail();
-            pointUseDetail.setPointBag(pointBagNew);
-            pointUseDetail.setPointUse(pointUse);
-            pointUseDetail.setUsedPoints(usedPointsBag);
-
-            pointUseDetail = pointUseDetailDao.create(pointUseDetail);
-            details.add(pointUseDetail);
+                pointUseDetail = pointUseDetailDao.create(pointUseDetail);
+                details.add(pointUseDetail);
+                
+            }
+            
         }
         pointUse.setDetails(details);
         return Response.ok(pointUse).build();
+    }
+    
+    class expirationDateComparator implements java.util.Comparator<PointBag> {
+        @Override
+        public int compare(PointBag a, PointBag b) {
+            return a.getExpirationDate().compareTo(b.getExpirationDate()) ;
+        }
     }
 
     public Integer totalPoints (Set<PointBag> listPointBag){
