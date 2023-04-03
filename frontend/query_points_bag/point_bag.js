@@ -13,8 +13,8 @@ $(document).ready(function () {
 });
 
 function loadTableDate() {
-    var url = `http://localhost:8080/prueba/point_bags/range/${
-        URLSearchParams($("#range-form").serialize()).toString()
+    var url = `http://localhost:8080/prueba/point_bags/range?${
+        new URLSearchParams($("#range-form").serialize()).toString()
     }`;
     loadTable(url);
 }
